@@ -1,4 +1,4 @@
-package com.k.mapred.wordcount;
+package com.k.mapred.wordcount1;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -11,18 +11,19 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.io.IOException;
 
 /**
- * 本地运行WordCount
+ * 提交到集群
  */
 public class WordCountDriver {
-    //让程序强制加载bin目录下的hadoop.dll->防止报错 UnsatisfiedLinkError
-    static {
-        try {
-            System.load("E:/Hadoop/hadoop-3.1.3/bin/hadoop.dll");
-        } catch (UnsatisfiedLinkError e) {
-            System.err.println("Native code library failed to load.\n" + e);
-            System.exit(1);
-        }
-    }
+    //打包到集群就不用加载本地文件了
+//    //让程序强制加载bin目录下的hadoop.dll->防止报错 UnsatisfiedLinkError
+//    static {
+//        try {
+//            System.load("E:/Hadoop/hadoop-3.1.3/bin/hadoop.dll");
+//        } catch (UnsatisfiedLinkError e) {
+//            System.err.println("Native code library failed to load.\n" + e);
+//            System.exit(1);
+//        }
+//    }
 
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
 
@@ -45,9 +46,9 @@ public class WordCountDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        // 6.设置输入输出路径                                   在本地运行
-        FileInputFormat.setInputPaths(job, new Path("D:/input/inputword"));
-        FileOutputFormat.setOutputPath(job, new Path("D:/output"));
+        // 6.设置输入输出路径                 动态参数传入路径
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         // 7.提交job
         boolean result = job.waitForCompletion(true);

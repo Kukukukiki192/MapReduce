@@ -1,4 +1,4 @@
-package com.k.mapred.wordcount;
+package com.k.mapred.wordcount1;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
